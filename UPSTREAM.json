@@ -1,0 +1,6 @@
+{
+  "frontend_commit": "98debc22902e82bf2c252fc2e7a3c6fcf5c3de6a",
+  "backend_commit": "c1a1c573f71421c6128151bb539bed1768d41562",
+  "frontend_upstream": "https://github.com/Aurowisp/Frontend",
+  "backend_upstream": "https://github.com/Aurowisp/Backend"
+}

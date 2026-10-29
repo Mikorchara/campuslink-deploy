@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: campuslink
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: main
+    dockerfilePath: ./deploy/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: CAMPUSLINK_APP_ENV
+        value: production
+      - key: CAMPUSLINK_DEBUG
+        value: "false"
+      - key: CAMPUSLINK_AUTO_CREATE_TABLES
+        value: "false"
+      - key: CAMPUSLINK_SEED_DEMO_DATA
+        value: "false"
+      - key: CAMPUSLINK_INITIALIZE_SCHEMA
+        value: "true"
+      - key: CAMPUSLINK_UPLOAD_STORAGE
+        value: supabase
+      - key: CAMPUSLINK_SUPABASE_STORAGE_BUCKET
+        value: campuslink-images
+      - key: CAMPUSLINK_JWT_SECRET_KEY
+        generateValue: true
+      - key: CAMPUSLINK_DATABASE_URL
+        sync: false
+      - key: CAMPUSLINK_DATABASE_PASSWORD
+        sync: false
+      - key: CAMPUSLINK_SUPABASE_URL
+        sync: false
+      - key: CAMPUSLINK_SUPABASE_STORAGE_KEY
+        sync: false

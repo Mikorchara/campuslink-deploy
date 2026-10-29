@@ -1,0 +1,79 @@
+:root {
+  /* ================= 品牌与核心色彩体系 ================= */
+  --color-primary: #10B958;             /* 福州大学校园活力主绿 */
+  --color-primary-dark: #05A843;        /* 主绿深色按压态 */
+  --color-primary-light: #EDFBEB;       /* 二手闲置卡片浅绿背景 */
+  --color-primary-soft: #D6F7D2;        /* 浅绿悬浮态 */
+  --color-primary-gradient: linear-gradient(135deg, #18C762 0%, #05A843 100%);
+
+  --color-secondary: #4DA5FA;          /* 论坛辅助明亮蓝 */
+  --color-secondary-dark: #2563EB;      /* 辅助蓝加深 */
+  --color-secondary-light: #E6F3FD;     /* 校园论坛卡片浅蓝背景 */
+  --color-secondary-soft: #CFE8FC;      /* 浅蓝悬浮态 */
+  --color-secondary-gradient: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+
+  --color-price: #FF2442;               /* 醒目商品价格红 */
+  --color-price-sub: #E11D48;
+
+  --color-tag-blue-bg: #E8F4FD;         /* 论坛新生指南 Tag 背景 */
+  --color-tag-blue-text: #2563EB;       /* 论坛新生指南 Tag 文字 */
+  --color-tag-green-bg: #EAF9EC;        /* 论坛学习经验 Tag 背景 */
+  --color-tag-green-text: #16A34A;      /* 论坛学习经验 Tag 文字 */
+
+  /* ================= 背景与中性色彩体系 ================= */
+  --color-bg-page: #F7F9FA;             /* 页面基础白灰背景 */
+  --color-bg-card: #FFFFFF;             /* 纯白卡片背景 */
+  --color-bg-subtle: #F1F5F9;           /* 弱背景浅灰 */
+  --color-bg-active: #F8FAFC;           /* 列表点击态 */
+
+  --color-text-main: #1E293B;           /* 主标题深色 */
+  --color-text-regular: #475569;        /* 正文文字 */
+  --color-text-secondary: #64748B;      /* 次级说明文字 */
+  --color-text-muted: #94A3B8;          /* 辅助文字、时间、未选中 Tab */
+  --color-text-placeholder: #A0AEC0;    /* 输入框占位符 */
+
+  --color-border-light: #F1F5F9;        /* 极浅边框 */
+  --color-border-regular: #E2E8F0;      /* 标准边框 */
+  --color-dialog-backdrop: rgba(15, 23, 42, 0.45);
+
+  /* ================= 圆角与间距规范 ================= */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 22px;
+  --radius-pill: 9999px;
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-base: 16px;
+  --space-lg: 20px;
+  --space-xl: 24px;
+
+  /* ================= 字体与排版规范 ================= */
+  --font-family-base: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --font-family-art: "Plus Jakarta Sans", -apple-system, sans-serif;
+
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 13px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 22px;
+
+  /* ================= 阴影与微光规范 ================= */
+  --shadow-search: 0 4px 14px rgba(16, 185, 88, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-card-hover: 0 8px 24px rgba(16, 185, 88, 0.08);
+  --shadow-tabbar: 0 -2px 16px rgba(0, 0, 0, 0.04);
+
+  /* ================= 尺寸与布局规范 (以 iPhone 18 Pro Max 440x956 为基准) ================= */
+  --app-width: 440px;
+  --app-height: 956px;
+  --viewport-max-width: 440px;
+  --bottom-nav-height: 60px;
+  --safe-area-bottom: env(safe-area-inset-bottom, 16px);
+}

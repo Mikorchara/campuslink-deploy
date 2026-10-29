@@ -1,0 +1,17 @@
+.account-page { padding: var(--space-base); padding-bottom: 76px; }
+.account-heading { display: flex; align-items: center; justify-content: space-between; gap: var(--space-sm); margin-bottom: var(--space-lg); }
+.account-heading h1 { font-size: var(--font-size-xl); }
+.account-heading a, .account-heading button { color: var(--color-primary-dark); min-height: 44px; display: inline-flex; align-items: center; }
+.account-card { padding: var(--space-base); margin-bottom: var(--space-md); background: var(--color-bg-card); border: 1px solid var(--color-border-light); border-radius: var(--radius-lg); }
+.account-card h2 { font-size: var(--font-size-lg); margin-bottom: var(--space-sm); }
+.account-card p { color: var(--color-text-secondary); line-height: 1.8; overflow-wrap: anywhere; }
+.account-actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-md); }
+.account-actions button, .account-actions a, .account-submit { display: inline-flex; justify-content: center; align-items: center; min-height: 44px; padding: var(--space-sm) var(--space-base); border-radius: var(--radius-md); background: var(--color-primary-light); color: var(--color-primary-dark); }
+.account-actions .danger { color: var(--color-price-sub); background: var(--color-bg-subtle); }
+.account-error { color: var(--color-price-sub); padding: var(--space-sm); overflow-wrap: anywhere; }
+.account-message { color: var(--color-primary-dark); padding: var(--space-sm); }
+.account-field { display: flex; flex-direction: column; gap: var(--space-sm); margin-bottom: var(--space-base); }
+.account-field input, .account-field textarea, .account-field select { width: 100%; padding: var(--space-md); border: 1px solid var(--color-border-regular); border-radius: var(--radius-md); color: var(--color-text-main); background: var(--color-bg-card); font: inherit; }
+.account-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); }
+button:disabled { cursor: not-allowed; opacity: 0.6; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
