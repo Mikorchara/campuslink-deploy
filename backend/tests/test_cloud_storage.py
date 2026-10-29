@@ -100,3 +100,38 @@ def test_storage_configuration_validation(overrides):
 
 def test_redirect_does_not_forward_privileged_headers():
     assert image_storage.NoRedirect().redirect_request(None, None, 302, '', {}, 'https://other.example') is None
+
+
+@pytest.mark.parametrize('body', [b'{"statusCode":"404","message":"private detail"}',
+                                b'{"code":"NoSuchBucket"}'])
+def test_http_400_wrapped_missing_bucket_is_created_privately(remote, monkeypatch, body):
+    calls = []
+    class Opener:
+        def open(self, request, timeout):
+            calls.append(request)
+            if request.method == 'GET':
+                raise urllib.error.HTTPError('https://example.invalid', 400, 'bad request', {}, BytesIO(body))
+            return BytesIO(b'{}')
+    monkeypatch.setattr(image_storage.urllib.request, 'build_opener', lambda *_: Opener())
+    image_storage.ensure_cloud_bucket()
+    import json
+    assert len(calls) == 2
+    assert calls[1].method == 'POST' and json.loads(calls[1].data)['public'] is False
+
+
+@pytest.mark.parametrize('status,body', [(401, b'{"statusCode":"404"}'),
+                                      (403, b'private secret'), (400, b'not json'),
+                                      (400, b'{"statusCode":"403"}')])
+def test_storage_auth_or_invalid_response_never_creates_bucket(remote, monkeypatch, status, body):
+    calls = []
+    class Opener:
+        def open(self, request, timeout):
+            calls.append(request)
+            raise urllib.error.HTTPError('https://example.invalid', status, 'private diagnostic', {}, BytesIO(body))
+    monkeypatch.setattr(image_storage.urllib.request, 'build_opener', lambda *_: Opener())
+    with pytest.raises(AppError) as caught:
+        image_storage.ensure_cloud_bucket()
+    assert caught.value.status_code == 503
+    assert caught.value.upstream_http_status == status
+    assert 'private' not in str(caught.value)
+    assert len(calls) == 1

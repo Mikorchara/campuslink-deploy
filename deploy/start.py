@@ -20,6 +20,7 @@ def normalize_database_env(environment):
 
 
 def main():
+    print('Cloud startup: validating configuration.', flush=True)
     normalize_database_env(os.environ)
     root = Path(__file__).resolve().parent.parent
     sys.path.insert(0, str(root / 'backend'))
@@ -29,12 +30,15 @@ def main():
     if not settings.frontend_dist or not (Path(settings.frontend_dist) / 'index.html').is_file():
         raise RuntimeError('Compiled frontend is missing')
     from src.services.image_storage import ensure_cloud_bucket
+    print('Cloud startup: checking private image storage.', flush=True)
     ensure_cloud_bucket()
+    print('Cloud startup: private image storage ready.', flush=True)
     if os.environ.get('CAMPUSLINK_INITIALIZE_SCHEMA', '').lower() == 'true':
         from sqlalchemy import text
         from src.database.base import Base
         from src.database.session import engine
         import src.models
+        print('Cloud startup: connecting to database and initializing schema.', flush=True)
         # Only adds absent model tables. Never seeds accounts or alters columns.
         with engine.begin() as connection:
             connection.execute(text("SELECT pg_advisory_xact_lock(729145820)"))
@@ -53,4 +57,7 @@ if __name__ == '__main__':
         main()
     except Exception as error:
         print('Cloud startup failed (' + type(error).__name__ + '). Check private environment settings and service availability.', file=sys.stderr)
+        status = getattr(error, 'upstream_http_status', None)
+        if type(status) is int and 100 <= status <= 599:
+            print('Image storage upstream HTTP status: ' + str(status) + '. No credentials or response body logged.', file=sys.stderr)
         sys.exit(1)

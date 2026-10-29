@@ -35,10 +35,23 @@ def storage_request(method: str, route: str, content: bytes | None = None, conte
             return payload
     except urllib.error.HTTPError as error:
         status = error.code
+        # Storage REST can wrap a logical 404 inside an HTTP 400 response.
+        # Read only a bounded JSON body; never log or return upstream text.
+        missing = status == 404
+        if status == 400 and method == 'GET':
+            try:
+                detail = json.loads(error.read(16384))
+                missing = isinstance(detail, dict) and (
+                    str(detail.get('statusCode')) == '404'
+                    or detail.get('code') in ('NoSuchBucket', 'NoSuchKey'))
+            except (ValueError, OSError):
+                pass
         error.close()
-        if method == 'GET' and status == 404:
+        if method == 'GET' and missing:
             raise AppError(404, '图片不存在') from None
-        raise AppError(503, '图片存储暂时不可用，请稍后重试') from None
+        failure = AppError(503, '图片存储暂时不可用，请稍后重试')
+        failure.upstream_http_status = status
+        raise failure from None
     except (urllib.error.URLError, OSError, TimeoutError):
         raise AppError(503, '图片存储暂时不可用，请稍后重试') from None
 
