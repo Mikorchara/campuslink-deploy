@@ -1,5 +1,9 @@
 # CampusLink Render 与 Supabase 部署
 
+2026-10-30：固定网站已上线。消息与点赞更新仅新增 `notifications`、`product_likes`、`post_likes` 表；原有账号、商品、帖子、交易、图片不清空，环境变量不变。保持 `CAMPUSLINK_INITIALIZE_SCHEMA=true`，启动时自动创建缺失表。新提醒只针对新版上线后发生的操作。
+
+新版验收补充：双账号预订/处理通知、帖子评论通知、两种点赞与取消、消息权限、未读数量、已读保留和消息详情跳转。网页可见时每 30 秒检查新消息，当前不提供网页关闭后的系统推送。
+
 这是配套前后端的部署源码，基于 Aurowisp/Frontend、Aurowisp/Backend 的原交付成果以及后续集成和论坛开发。具体来源版本记录在 `UPSTREAM.json`。原开发仓库分别维护；这个仓库用于统一部署，不包含本机数据库、上传文件、私密配置或 Git 历史。
 
 ## Render 页面选择

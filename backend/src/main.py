@@ -14,7 +14,7 @@ from src.core.exceptions import AppError
 from src.frontend import SPAStaticFiles
 from src.database.init_db import create_tables, seed_demo_data
 from src.database.session import SessionLocal
-from src.routers import auth, favorites, health, products, transactions, users, uploads, forum
+from src.routers import auth, favorites, health, products, transactions, users, uploads, forum, activity
 
 
 @asynccontextmanager
@@ -84,6 +84,7 @@ app.include_router(favorites.router, prefix=settings.api_prefix)
 app.include_router(transactions.router, prefix=settings.api_prefix)
 app.include_router(uploads.router, prefix=settings.api_prefix)
 app.include_router(forum.router, prefix=settings.api_prefix)
+app.include_router(activity.router, prefix=settings.api_prefix)
 
 
 @app.get("/", include_in_schema=False, response_model=None)

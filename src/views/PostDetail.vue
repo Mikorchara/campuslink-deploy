@@ -9,6 +9,7 @@
         <div v-if="isOwner" class="forum-actions"><RouterLink class="forum-button" :to="`/forum/${post.id}/edit`">编辑帖子</RouterLink><button class="forum-button danger" @click="confirmDelete = { kind: 'post', id: post.id }">删除帖子</button></div>
         <img v-if="post.image_url" :src="post.image_url" :alt="post.title" class="forum-cover" />
         <div class="forum-body">{{ post.content }}</div>
+        <LikeButton :key="post.id" kind="post" :id="post.id" />
       </article>
       <section class="forum-panel" aria-label="讨论区">
         <h2>讨论区（{{ totalComments }}）</h2><p class="forum-subtitle">文明发言，保护自己和他人的个人信息。</p>
@@ -40,6 +41,7 @@ import { errorMessage } from '../api/request';
 import type { ForumPost, ForumComment } from '../types';
 import RequestState from '../components/common/RequestState.vue';
 import AppDialog from '../components/common/AppDialog.vue';
+import LikeButton from '../components/common/LikeButton.vue';
 import '../styles/forum.css';
 const route = useRoute(), router = useRouter(), session = useUserStore();
 const post = ref<ForumPost | null>(null), loading = ref(false), error = ref('');

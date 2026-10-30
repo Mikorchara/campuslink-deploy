@@ -47,6 +47,7 @@
 
         <h1 class="item-title">{{ product.title }}</h1>
         <p class="item-desc">{{ product.description }}</p>
+        <LikeButton :key="product.id" kind="product" :id="product.id" />
 
         <div class="meta-tags">
           <div class="meta-tag-item">
@@ -156,6 +157,7 @@ import { errorMessage } from '../api/request';
 import { useUserStore } from '../stores/user';
 import RequestState from '../components/common/RequestState.vue';
 import AppDialog from '../components/common/AppDialog.vue';
+import LikeButton from '../components/common/LikeButton.vue';
 import type { Product } from '../types';
 const route = useRoute();
 const router = useRouter();

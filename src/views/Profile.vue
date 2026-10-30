@@ -41,6 +41,7 @@
     <main class="menu-container">
       <div class="menu-group">
         <div class="group-title">交易与互助管理</div>
+        <RouterLink class="menu-item" to="/notifications"><span class="menu-title">消息中心 · 预订、评论与点赞</span><span class="version-tag">查看 ›</span></RouterLink>
         <div class="menu-item" @click="handlePublish">
           <div class="menu-left">
             <div class="menu-icon-box icon-green">

@@ -28,6 +28,7 @@
         id="app-mobile-frame"
         class="mobile-container fixed-mobile-frame"
       >
+        <NotificationBar />
         <!-- 页面内容独立纵向滚动主视口 -->
         <main
           class="app-scroll-viewport"
@@ -52,6 +53,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import BottomNavigation from './components/common/BottomNavigation.vue';
+import NotificationBar from './components/common/NotificationBar.vue';
 
 const route = useRoute();
 const scrollViewportRef = ref<HTMLElement | null>(null);

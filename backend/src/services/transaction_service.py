@@ -1,4 +1,5 @@
 from sqlalchemy import or_, select, update
+from uuid import uuid4
 from sqlalchemy.orm import Session, selectinload
 
 from src.core.exceptions import AppError
@@ -7,6 +8,7 @@ from src.models.transaction import TransactionRequest, TransactionStatus
 from src.models.user import User
 from src.schemas.transaction import TransactionCreate, TransactionRead
 from src.services.product_service import get_product
+from src.services.activity_service import notify
 
 
 def serialize_transaction(item: TransactionRequest) -> TransactionRead:
@@ -69,6 +71,11 @@ def create_transaction(
         note=payload.note,
     )
     db.add(item)
+    db.flush()
+    notify(db, recipient_id=product.seller_id, actor_id=buyer.id,
+        event_key=f'transaction:{uuid4().hex}', kind='booking',
+        message=f'{buyer.username} 申请预订你的商品《{product.title}》，请查看订单留言并处理',
+        target_type='transaction', target_id=item.id)
     db.commit()
     return _load_transaction(db, item.id)
 
@@ -159,6 +166,12 @@ def update_transaction_status(
             .values(status=ProductStatus.AVAILABLE)
         )
 
+    recipient = item.buyer_id if user.id == item.seller_id else item.seller_id
+    label = {TransactionStatus.ACCEPTED: '接受了预订', TransactionStatus.REJECTED: '拒绝了预订',
+             TransactionStatus.CANCELLED: '取消了交易', TransactionStatus.COMPLETED: '确认交易完成'}[new_status]
+    notify(db, recipient_id=recipient, actor_id=user.id,
+        event_key=f'transaction:{uuid4().hex}', kind='transaction_status',
+        message=f'{user.username} {label}：《{item.product.title}》', target_type='transaction', target_id=item.id)
     db.commit()
     return _load_transaction(db, item.id)
 

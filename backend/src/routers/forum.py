@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Query
+from uuid import uuid4
 from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
@@ -8,6 +9,7 @@ from src.models.forum import ForumComment, ForumPost
 from src.schemas.common import ApiResponse, success
 from src.schemas.forum import CommentPage, CommentRead, CommentWrite, ForumCategory, PostPage, PostRead, PostWrite
 from src.services.forum_service import ensure_owner, get_post, list_posts, read_comment, read_post
+from src.services.activity_service import notify
 
 router = APIRouter(prefix="/forum", tags=["Forum"])
 
@@ -67,9 +69,13 @@ def comments(post_id: int, db: DatabaseSession, page: int = Query(1, ge=1), page
 
 @router.post("/posts/{post_id}/comments", response_model=ApiResponse[CommentRead], status_code=201)
 def create_comment(post_id: int, payload: CommentWrite, db: DatabaseSession, user: CurrentUser):
-    get_post(db, post_id, lock=True)  # Coordinate with concurrent post deletion.
+    post = get_post(db, post_id, lock=True)  # Coordinate with concurrent post deletion.
     comment = ForumComment(post_id=post_id, author_id=user.id, **payload.model_dump())
     db.add(comment)
+    db.flush()
+    notify(db, recipient_id=post.author_id, actor_id=user.id, event_key=f'comment:{uuid4().hex}',
+        kind='post_comment', message=f'{user.username} 评论了你的帖子《{post.title}》',
+        target_type='post', target_id=post.id)
     db.commit()
     return success(read_comment(comment), code=201, message="评论已发布")
 

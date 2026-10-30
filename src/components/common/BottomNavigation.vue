@@ -75,6 +75,7 @@ const navItems: NavItem[] = [
 ];
 
 const currentPath = computed(() => {
+  if (route.path === '/notifications') return '/profile';
   if (route.path.startsWith('/idle')) return '/idle';
   if (route.path.startsWith('/forum')) return '/forum';
   if (route.path.startsWith('/profile')) return '/profile';

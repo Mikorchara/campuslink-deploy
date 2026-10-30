@@ -4,6 +4,11 @@ import { pinia, useUserStore } from '../stores/user';
 
 const routes: RouteRecordRaw[] = [
   {
+    path: '/notifications',
+    component: () => import('../views/Notifications.vue'),
+    meta: { title: '消息中心 - 福帮帮', showNav: true, requiresAuth: true }
+  },
+  {
     path: '/',
     name: 'Home',
     component: () => import('../views/Home.vue'),
