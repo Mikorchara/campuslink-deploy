@@ -10,6 +10,9 @@ export async function getForumPosts(query: { keyword?: string; category?: string
 export async function getMyForumPosts(page = 1, page_size = 20) {
   return (await request<ForumPage<ForumPost>>(`/forum/posts/mine?page=${page}&page_size=${page_size}`)).data;
 }
+export async function getMyParticipatedPosts(page = 1, page_size = 20) {
+  return (await request<ForumPage<ForumPost>>(`/forum/posts/participated?page=${page}&page_size=${page_size}`)).data;
+}
 export async function getForumPost(id: string | number) { return (await request<ForumPost>(`/forum/posts/${id}`)).data; }
 export async function saveForumPost(payload: ForumPostPayload, id?: string) {
   return (await request<ForumPost>(`/forum/posts${id ? `/${id}` : ''}`, { method: id ? 'PUT' : 'POST', body: JSON.stringify(payload) })).data;

@@ -36,6 +36,7 @@ export interface ForumPost {
     avatar: string;
   };
   comment_count: number;
+  last_participated_at?: string | null;
   created_date: string;
   likes_count?: number;
   category?: ForumCategory;

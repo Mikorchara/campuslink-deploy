@@ -59,3 +59,23 @@ def read_comment(comment: ForumComment) -> CommentRead:
     return CommentRead(id=comment.id, post_id=comment.post_id, content=comment.content,
         author=SellerInfo(id=comment.author.id, name=comment.author.username, avatar=comment.author.avatar),
         created_at=comment.created_at, updated_at=comment.updated_at)
+
+
+def list_participated_posts(db: Session, user_id: int, *, page: int, page_size: int) -> dict:
+    # Group only this user's surviving comments, never join raw comments to the
+    # paginated list: repeated comments must not duplicate a post or its count.
+    participation = select(ForumComment.post_id,
+        func.max(ForumComment.created_at).label('last_at'),
+        func.max(ForumComment.id).label('last_id')).where(
+        ForumComment.author_id == user_id).group_by(ForumComment.post_id).subquery()
+    total = db.scalar(select(func.count()).select_from(ForumPost).join(
+        participation, participation.c.post_id == ForumPost.id))
+    counts = select(ForumComment.post_id, func.count().label('n')).group_by(ForumComment.post_id).subquery()
+    rows = db.execute(select(ForumPost, func.coalesce(counts.c.n, 0), participation.c.last_at)
+        .join(participation, participation.c.post_id == ForumPost.id)
+        .outerjoin(counts, counts.c.post_id == ForumPost.id)
+        .options(selectinload(ForumPost.author))
+        .order_by(participation.c.last_at.desc(), participation.c.last_id.desc(), ForumPost.id.desc())
+        .offset((page - 1) * page_size).limit(page_size)).all()
+    return dict(items=[read_post(db, post, count).model_copy(update={'last_participated_at': last_at})
+                       for post, count, last_at in rows], total=total, page=page, page_size=page_size)

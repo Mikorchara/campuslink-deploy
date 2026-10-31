@@ -43,6 +43,7 @@ class PostRead(BaseModel):
     created_at: datetime
     updated_at: datetime
     created_date: str
+    last_participated_at: datetime | None = None
 
 
 class CommentRead(BaseModel):

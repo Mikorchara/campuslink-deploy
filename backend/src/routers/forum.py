@@ -10,6 +10,7 @@ from src.schemas.common import ApiResponse, success
 from src.schemas.forum import CommentPage, CommentRead, CommentWrite, ForumCategory, PostPage, PostRead, PostWrite
 from src.services.forum_service import ensure_owner, get_post, list_posts, read_comment, read_post
 from src.services.activity_service import notify
+from src.services.forum_service import list_participated_posts
 
 router = APIRouter(prefix="/forum", tags=["Forum"])
 
@@ -31,6 +32,12 @@ def create_post(payload: PostWrite, db: DatabaseSession, user: CurrentUser):
     db.add(post)
     db.commit()
     return success(read_post(db, get_post(db, post.id)), code=201, message="帖子发布成功")
+
+
+@router.get('/posts/participated', response_model=ApiResponse[PostPage])
+def participated_posts(db: DatabaseSession, user: CurrentUser,
+                       page: int = Query(1, ge=1), page_size: int = Query(20, ge=1, le=100)):
+    return success(list_participated_posts(db, user.id, page=page, page_size=page_size))
 
 
 @router.get("/posts/{post_id}", response_model=ApiResponse[PostRead])

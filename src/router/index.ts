@@ -4,6 +4,12 @@ import { pinia, useUserStore } from '../stores/user';
 
 const routes: RouteRecordRaw[] = [
   {
+    path: '/my-discussions',
+    component: () => import('../views/ForumList.vue'),
+    props: { participated: true },
+    meta: { title: '我参与的讨论 - 福帮帮', showNav: true, requiresAuth: true }
+  },
+  {
     path: '/notifications',
     component: () => import('../views/Notifications.vue'),
     meta: { title: '消息中心 - 福帮帮', showNav: true, requiresAuth: true }
